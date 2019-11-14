@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width">
+    <title>blog-post</title>
+  </head>
+  <body>
+      <h1> List of blogs </h1>
+      <ul id="blogPosts"> </ul>
+      <h3> Adding a new blog-post </h3>
+      <form>
+        <label> title :</label>
+          <input id="title" type="text" placeholder="blog-title"> <br>
+        <br>
+
+        <label> content :</label>
+          <textarea id="content" type="text" placeholder="content"></textarea><br>
+        <br>
+
+        <label> author :</label>
+          <input id="author" type="text" placeholder="author"> <br>
+        <br>
+
+        <label> publishDate :</label>
+          <input id="publishDate" type="text" placeholder="date"> <br>
+        <br>
+
+        <button id="save" type="submit"> SAVE </button>
+        <br>
+        <br>
+      </form>
+
+    <h3> Delete a blog-post </h3>
+      <form>
+      <label> Search for ID :</label>
+        <input id="deleteID" type="text" placeholder="ID">
+        <button id="delete" type="submit">DELETE</button>
+      <br>
+      <br>
+      </form>
+
+      <h3> Updating a blog-post </h3>
+      <form>
+        <label> Search for ID to update your post:</label>
+        <input id="updateID" type="text" placeholder="ID">
+        <br>
+        <br>
+
+        <label> title :</label>
+        <input id="updateTitle" type="text" placeholder="blog-title"> <br>
+        <br>
+
+        <label> content :</label>
+        <textarea id="updateContent" type="text" placeholder="content"></textarea><br>
+        <br>
+
+        <label> author :</label>
+        <input id="updateAuthor" type="text" placeholder="author"> <br>
+        <br>
+
+        <label> publishDate :</label>
+        <input id="updatePublishDate" type="text" placeholder="date"> <br>
+        <br>
+
+        <button id="update" type="submit">UPDATE</button>
+      </form>
+
+    <p id="errorMessages"> </p>
+      <script src="https://code.jquery.com/jquery-3.4.1.js">
+      </script>
+      <script src="./js/script.js" type="text/javascript"></script>
+  </body>
+</html>
