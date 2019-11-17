@@ -49,7 +49,7 @@ let blog_posts = [{
 	author : "Fabian",
 	publishDate: new Date(2019, 10, 27)
 }];
-app.get("/blog-posts", (req, res, next) =>{
+app.get("/api/blog-posts", (req, res, next) =>{
 	BlogPostList.getAll()
 		.then( blog_posts => {
 			return res.status(200).json(blog_posts);
