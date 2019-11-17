@@ -22,7 +22,7 @@ let BlogPostList = {
 			})
 	},
 	getById : function(pId) {
-		return BlogPost.findOne({id : pId})
+		return Blogpost.findOne({id : pId})
 			.then(post => {
 				return post;
 			})
@@ -31,7 +31,7 @@ let BlogPostList = {
 			})
 	},
 	post: function(newPost){
-		return BlogPost.create(newPost)
+		return Blogpost.create(newPost)
 			.then(post => {
 				return post;
 			})
@@ -40,7 +40,7 @@ let BlogPostList = {
 			})
 	},
 	deleteById: function(pId) {
-		return BlogPost.findOneAndRemove({id:pId})
+		return BlogPpost.findOneAndRemove({id:pId})
 			.then(post => {
 				return post;
 			})
@@ -49,7 +49,7 @@ let BlogPostList = {
 			})
 	},
 	updatePost: function(newPost) {
-		return BlogPost.findOneAndReplace({id:newPost.id}, newPost, {returnNewDocument:true})
+		return Blogpost.findOneAndReplace({id:newPost.id}, newPost, {returnNewDocument:true})
 			.then(post => {
 				return post;
 			})

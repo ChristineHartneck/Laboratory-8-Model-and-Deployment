@@ -49,15 +49,19 @@ let blog_posts = [{
 	author : "Fabian",
 	publishDate: new Date(2019, 10, 27)
 }];
-app.get( "/api/blog-posts", ( req, res, next ) => {
-	
-	BlogPostList.find()
-		if(err) return res.status(500).json({
-		message: "Something went wrong with the database. Try again later.",
-		status: 500})
-
-		return res.status( 200 ).json({blog_posts});
-	});
+app.get("/blog-posts", (req, res, next) =>{
+	BlogPostList.getAll()
+		.then( blog_posts => {
+			return res.status(200).json(blog_posts);
+		})
+		.catch( error => {
+			res.statusMessage = "Something went wrong with the DB. Try again later.";
+			return res.status(500).json({
+				message: "Something went wrong with the DB. Try again later.",
+				status: 500
+			});
+		})
+});
 
 
 app.get( "/api/blog-post", ( req, res, next ) => {
