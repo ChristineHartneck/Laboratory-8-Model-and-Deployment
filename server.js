@@ -51,7 +51,7 @@ let blog_posts = [{
 }];
 app.get( "/api/blog-posts", ( req, res, next ) => {
 	
-	BlogPostList.find({}, (err, blog_posts) => {
+	BlogPostList.find()
 		if(err) return res.status(500).json({
 		message: "Something went wrong with the database. Try again later.",
 		status: 500})
@@ -59,8 +59,6 @@ app.get( "/api/blog-posts", ( req, res, next ) => {
 		return res.status( 200 ).json({blog_posts});
 	});
 
-
-});
 
 app.get( "/api/blog-post", ( req, res, next ) => {
 	let author = req.query.author;
