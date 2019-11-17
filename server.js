@@ -1,14 +1,17 @@
 
 let express = require( "express" );
 let morgan = require( "morgan" );
+let mongoose = require('mongoose');
 let config = require("./config");
-let Blogpost = require("./blog-post-model");
+let {BlogPostList} = require("./blog-post-model");
 let bodyParser = require( "body-parser" ); //caching the bodyformat to a jsonformat
-let uuid = require ( "uuid/v4" );const mongoose = require('mongoose');
-mongoose.connect(config.DATABASE_URL, {useNewUrlParser: true});
+let uuid = require ( "uuid/v4" );
+//mongoose.connect(config.DATABASE_URL, {useNewUrlParser: true});
+const {DATABASE_URL, PORT} = require ( './config' );
 
 let app = express();
 let jsonParser = bodyParser.json();
+mongoose.Promise = global.Promise;
 app.use(bodyParser.urlencoded({ extended: false}));
 app.use (jsonParser);
 
@@ -48,10 +51,12 @@ let blog_posts = [{
 }];
 app.get( "/api/blog-posts", ( req, res, next ) => {
 	
-	Blogpost.find({}, (err, blogposts) => {
-		if(err) return res.status(400).json({error: err})
+	BlogPostList.find({}, (err, blog_posts) => {
+		if(err) return res.status(500).json({
+		message: "Something went wrong with the database. Try again later.",
+		status: 500})
 
-		return res.status( 200 ).json({blogposts});
+		return res.status( 200 ).json({blog_posts});
 	});
 
 
@@ -60,23 +65,23 @@ app.get( "/api/blog-posts", ( req, res, next ) => {
 app.get( "/api/blog-post", ( req, res, next ) => {
 	let author = req.query.author;
 	if (!author){
-		return res.status( 406 ).json(
-		{message : "Missing author on query!",
+		return res.status( 406 ).json({
+		message : "Missing author on query!",
 		status : 406
 	});
 }
 //filtering the blog posts by looking throw each element by matching author
-	Blogpost.find({author:author}, (err, blogposts) => {
-		if(err) return res.status(400).json({message: err.message})
+	BlogPostList.find({author:author}, (err, blog_posts) => {
+		//if(err) return res.status(400).json({message: err.message})
 
-		if (blogposts.length == 0){
+		if (blog_posts.length == 0){
 			return res.status( 404 ).json(
 				{message : "Author doesn't exist!",
 				status : 404
 			});
 
 		}
-		return res.status( 200 ).json({blogposts});
+		return res.status( 200 ).json({blog_posts});
 	});
 });
 
@@ -103,13 +108,17 @@ console.log(req.body)
 	}
 
 	var newPost = new Blogpost({
+		id : uuid.v4(),
 		title : title,
 		content: content,
 		author: author,
 		publishDate: new Date(publishDate)
 	});
-	newPost.save( err=>{
-		if(err) return res.status(400).json({message: err.message});
+	newPost.save( err =>{
+		if(err) return res.status(500).json({
+			message : "Something went wrong with the database. Try again later.",
+			status : 500
+		});
 		// saved!
 		return res.status( 201 ).json({
 			message : "New post is created",
@@ -125,8 +134,8 @@ console.log(req.body)
 
 app.delete("/api/blog-posts/:id", (req, res) =>{
 	let id = req.params.id;
-	Blogpost.deleteOne({ _id: id }, (err, deleteResult) => {
-		if(err) return res.status(400).json({message: err.message})
+	BlogPostList.deleteOne({ _id: id }, (err, deleteResult) => {
+		//if(err) return res.status(400).json({message: err.message})
 		if (deleteResult.deletedCount == 0){
 			return res.status(404).json({
 				message: "ID of the post doesn't exist!",
@@ -167,15 +176,26 @@ app.put("/api/blog-posts/:id", jsonParser, (req, res) => {
 	let postInfo = req.body;
 
 
-	Blogpost.findByIdAndUpdate(id, postInfo , { new: true },(err, updatedPost) => {
-		if(err) return res.status(400).json({message: err.message})
+	BlogPostList.findByIdAndUpdate(id, postInfo , { new: true },(err, updatedPost) => {
+		//if(err) return res.status(400).json({message: err.message})
 		if (!updatedPost){
 			return res.status(404).json({
 				message: "ID of the post doesn't exist!",
 				status: 404
 			});
 		}
-		
+		if(postInfo.title)
+			newPost.title = postInfo.title
+
+		if(postInfo.content)
+			newPost.content = postInfo.content
+
+		if(postInfo.author)
+			newPost.author = postInfo.author
+
+		if(postInfo.publishDate)
+			newPost.publishDate = postInfo.publishDate
+
 		return res.status(202).json(updatedPost);
 	});
 });
@@ -184,6 +204,48 @@ app.put("/api/blog-posts/:id", jsonParser, (req, res) => {
 
 
 
-app.listen( config.PORT, () => {
-	console.log( "App is running on port " + config.PORT);
-});
+let server;
+
+function runServer(port, databaseUrl){
+	return new Promise( (resolve, reject ) => {
+		mongoose.connect(databaseUrl, response => {
+			if ( response ){
+				return reject(response);
+			}
+			else{
+				server = app.listen(port, () => {
+					console.log( "App is running on port " + port );
+					resolve();
+				})
+				.on( 'error', err => {
+					mongoose.disconnect();
+					return reject(err);
+				})
+			}
+		});
+	});
+}
+
+function closeServer(){
+	return mongoose.disconnect()
+		.then(() => {
+			return new Promise((resolve, reject) => {
+				console.log('Closing the server');
+				server.close( err => {
+					if (err){
+						return reject(err);
+					}
+					else{
+						resolve();
+					}
+				});
+			});
+		});
+}
+
+runServer( PORT, DATABASE_URL )
+	.catch( err => {
+		console.log( err );
+	});
+
+module.exports = { app, runServer, closeServer };
