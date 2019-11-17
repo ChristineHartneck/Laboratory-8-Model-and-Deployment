@@ -1,2 +1,2 @@
-exports.DATABASE_URL = process.env.DATABASE_URL || "mongodb://localhost/christine-blog-post";//"mongodb+srv://root:root@cluster0-6qr82.mongodb.net/test?retryWrites=true&w=majority"
+exports.DATABASE_URL = process.env.DATABASE_URL || "mongodb://localhost/christine-blog-post";//"mongodb+srv://root:root@cluster0-6qr82.mongodb.net/StudentsDBretryWrites=true&w=majority"
 exports.PORT = process.env.PORT || 8080;
