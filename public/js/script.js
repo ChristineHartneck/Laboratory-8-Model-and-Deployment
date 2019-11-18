@@ -44,7 +44,7 @@ $("#save").on("click", (event) => {
     };
 
     $.ajax({
-        url: url,
+        url: "/blog-posts",
         data: JSON.stringify(obj),
         method: "POST",
         contentType: "application/json",
@@ -74,7 +74,7 @@ $("#delete").on("click", (event) => {
     };
 
     $.ajax({
-        url: url + '/' + id,
+        url: "/blog-posts/:id" + '/' + id,
         method: "DELETE",
         data: JSON.stringify(body),
         contentType: "application/json",
@@ -112,7 +112,7 @@ $("#update").on("click", (event) => {
     });
 
     $.ajax({
-        url: url + '/' + id,
+        url: "/blog-posts/:id" + '/' + id,
         method: "PUT",
         data: JSON.stringify(body),
         contentType: "application/json",

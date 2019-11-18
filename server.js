@@ -58,9 +58,9 @@ app.get("/blog-posts", (req, res, next) =>{
 			return res.status(200).json(blog_posts);
 		})
 		.catch( error => {
-			res.statusMessage = "Something went wrong with the DB. Try again later.";
+			res.statusMessage = "Something went wrong with the database. Try again later.";
 			return res.status(500).json({
-				message: "Something went wrong with the DB. Try again later.",
+				message: "Something went wrong with the database. Try again later.",
 				status: 500
 			});
 		})
