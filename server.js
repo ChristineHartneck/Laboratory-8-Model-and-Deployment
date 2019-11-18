@@ -52,7 +52,7 @@ let blog_posts = [{
 	author : "Fabian",
 	publishDate: new Date(2019, 10, 27)
 }];
-app.get("/api/blog-posts", (req, res, next) =>{
+app.get("/blog-posts", (req, res, next) =>{
 	BlogPostList.getAll()
 		.then( blog_posts => {
 			return res.status(200).json(blog_posts);
@@ -67,7 +67,7 @@ app.get("/api/blog-posts", (req, res, next) =>{
 });
 
 
-app.get( "/api/blog-post", ( req, res, next ) => {
+app.get( "/blog-post", ( req, res, next ) => {
 	let author = req.query.author;
 	if (!author){
 		return res.status( 406 ).json({
@@ -92,7 +92,7 @@ app.get( "/api/blog-post", ( req, res, next ) => {
 
 
 
-app.post( "/api/blog-posts", jsonParser, ( req, res, next ) => {
+app.post( "/blog-posts", jsonParser, ( req, res, next ) => {
 	let title = req.body.title;
 	let content = req.body.content;
 	let author = req.body.author;
@@ -137,7 +137,7 @@ console.log(req.body)
 
 });
 
-app.delete("/api/blog-posts/:id", (req, res) =>{
+app.delete("/blog-posts/:id", (req, res) =>{
 	let id = req.params.id;
 	BlogPostList.deleteOne({ _id: id }, (err, deleteResult) => {
 		//if(err) return res.status(400).json({message: err.message})
@@ -155,7 +155,7 @@ app.delete("/api/blog-posts/:id", (req, res) =>{
 
 });
 
-app.put("/api/blog-posts/:id", jsonParser, (req, res) => {
+app.put("/blog-posts/:id", jsonParser, (req, res) => {
 	let id = req.body.id;
 	let id2 = req.params.id;
 	console.log(req.body);
