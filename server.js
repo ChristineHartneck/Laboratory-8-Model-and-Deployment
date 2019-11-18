@@ -31,31 +31,11 @@ app.use( morgan( "dev" ) );
 	publishDate: Date
 }*/
 
-let blog_posts = [{
-	id : uuid(),
-	title : "First-Blog",
-	content : "Hello, my name is...",
-	author : "Christine",
-	publishDate: new Date(2019, 10, 25)
-},
-{
-	id : uuid(),
-	title : "Blog",
-	content : "Hey, how are you?",
-	author : "Brain",
-	publishDate: new Date(2019, 10, 26)
-},
-{
-	id : uuid(),
-	title : "Blog-3",
-	content : "I like..",
-	author : "Fabian",
-	publishDate: new Date(2019, 10, 27)
-}];
+
 app.get("/blog-posts", (req, res, next) =>{
 	BlogPostList.getAll()
-		.then( blog_posts => {
-			return res.status(200).json(blog_posts);
+		.then( blogPosts => {
+			return res.status(200).json(blogPosts);
 		})
 		.catch( error => {
 			res.statusMessage = "Something went wrong with the database. Try again later.";
@@ -76,17 +56,17 @@ app.get( "/blog-post", ( req, res, next ) => {
 	});
 }
 //filtering the blog posts by looking throw each element by matching author
-	BlogPostList.find({author:author}, (err, blog_posts) => {
+	BlogPostList.find({author:author}, (err, blogPosts) => {
 		//if(err) return res.status(400).json({message: err.message})
 
-		if (blog_posts.length == 0){
+		if (blogPosts.length == 0){
 			return res.status( 404 ).json(
 				{message : "Author doesn't exist!",
 				status : 404
 			});
 
 		}
-		return res.status( 200 ).json({blog_posts});
+		return res.status( 200 ).json({blogPosts});
 	});
 });
 

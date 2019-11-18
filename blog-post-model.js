@@ -15,7 +15,7 @@ let BlogPostList = {
 	getAll: function(){
 		return Blogpost.find()
 			.then(blogPosts => {
-				return blog_post;
+				return blogPosts;
 			})
 			.catch(error => {
 				throw Error(error);
@@ -40,7 +40,7 @@ let BlogPostList = {
 			})
 	},
 	deleteById: function(pId) {
-		return BlogPpost.findOneAndRemove({id:pId})
+		return Blogpost.findOneAndRemove({id:pId})
 			.then(post => {
 				return post;
 			})
