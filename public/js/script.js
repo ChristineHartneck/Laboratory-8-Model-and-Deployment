@@ -1,12 +1,12 @@
-let url = "http://localhost:8080/api/blog-posts";
-let blogPosts = [];
+//let url = "http://localhost:8080/api/blog-posts";
+//let blogPosts = [];
 
 // Loading the existing posts
 function Posts() {
     $("#blogPosts > li").remove();
     $("#errorMessages").text("");
     $.ajax({
-        url: url,
+        url: "/blog-posts",
         method: "GET",
         dataType: "json",
         success: function(response) {
