@@ -74,7 +74,7 @@ $("#delete").on("click", (event) => {
     };
 
     $.ajax({
-        url: "/blog-posts/:id" + '/' + id,
+        url: "/blog-posts" + '/' + id,
         method: "DELETE",
         data: JSON.stringify(body),
         contentType: "application/json",
@@ -112,7 +112,7 @@ $("#update").on("click", (event) => {
     });
 
     $.ajax({
-        url: "/blog-posts/:id" + '/' + id,
+        url: "/blog-posts" + '/' + id,
         method: "PUT",
         data: JSON.stringify(body),
         contentType: "application/json",
