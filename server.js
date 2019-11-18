@@ -6,12 +6,15 @@ let config = require("./config");
 let {BlogPostList} = require("./blog-post-model");
 let bodyParser = require( "body-parser" ); //caching the bodyformat to a jsonformat
 let uuid = require ( "uuid/v4" );
+let cors = require('cors');
 //mongoose.connect(config.DATABASE_URL, {useNewUrlParser: true});
 const {DATABASE_URL, PORT} = require ( './config' );
 
 let app = express();
 let jsonParser = bodyParser.json();
 mongoose.Promise = global.Promise;
+app.options('*', cors()); // include before other routes 
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false}));
 app.use (jsonParser);
 
